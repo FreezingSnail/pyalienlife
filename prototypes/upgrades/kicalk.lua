@@ -49,6 +49,23 @@ if data and not yafc_turd_integration then
         },
     }}
 
+    data:extend{{
+        type = "recipe",
+        name = "kicalk-dry-fiber",
+        category = "impact-crusher",
+        enabled = false,
+        energy_required = 5,
+        ingredients = {
+            { type = "item", name = "kicalk-dry", amount = 1 },
+        },
+        results = {
+            { type = "item", name = "raw-fiber", amount_min = 2, amount_max = 3, probability = 0.85 },
+            { type = "item", name = "fiber", amount = 1 },
+            { type = "item", name = "biomass", amount_min = 0, amount_max = 2, probability = 0.45 },
+        },
+        main_product = "raw-fiber"
+	}}
+
     for i, recipe in pairs {
         RECIPE("kicalk-plantation-mk01"):copy(),
         RECIPE("kicalk-plantation-mk02"):copy(),
@@ -78,22 +95,23 @@ if data and not yafc_turd_integration then
 
     local other_species = {
         {
-            {{type = "item", name = "guar-seeds", amount = 1}, {type = "item", name = "guar", amount = 2}},
+            {{type = "item", name = "ralesia", amount = 2}},
         },
         {
-            {{type = "item", name = "ralesia-seeds", amount = 1}, {type = "item", name = "ralesia", amount = 2}},
-            {{type = "item", name = "rennea-seeds", amount = 1},  {type = "item", name = "rennea", amount = 1}},
+            
+            {{type = "item", name = "yotoi", amount = 1}},
+            {{type = "item", name = "grod", amount = 4}},
         },
         {
-            {{type = "item", name = "tuuphra-seeds", amount = 2}, {type = "item", name = "tuuphra", amount = 4}},
-            {{type = "item", name = "grod-seeds", amount = 2},    {type = "item", name = "grod", amount = 3}},
+            { {type = "item", name = "tuuphra", amount = 2}},
+            { {type = "item", name = "guar", amount = 1}},
         },
         {
-            {{type = "item", name = "yotoi-seeds", amount = 1},          {type = "item", name = "yotoi", amount = 4}},
-            {{type = "item", name = "cadaveric-arum-seeds", amount = 3}, {type = "item", name = "cadaveric-arum", amount = 2}},
+            {{type = "item", name = "rennea", amount = 4}},
+            {{type = "item", name = "cadaveric-arum", amount = 2}},
         },
         {
-            {{type = "item", name = "cridren-seeds", amount = 3}, {type = "item", name = "cridren", amount = 3}},
+            {{type = "item", name = "cridren", amount = 3}},
         }
     }
 
@@ -107,8 +125,8 @@ if data and not yafc_turd_integration then
         recipe.name = recipe.name .. "-rotation"
         recipe.main_product = "kicalk"
         for _, other in pairs(other_species[i]) do
-            recipe:add_ingredient(other[1])
-            recipe:add_result(other[2])
+            recipe:add_result(other[1])
+            recipe:remove_ingredient("fertalizer")
         end
         if i == 5 then
             recipe:add_ingredient {type = "item", name = "ulric-cub", amount = 1}
@@ -130,14 +148,13 @@ return {
         icon = "__pyalienlifegraphics3__/graphics/technology/updates/u-kicalk.png",
         icon_size = 128,
         order = "c-a",
-        prerequisites = {"kicalk-mk03"},
+        prerequisites = {"kicalk-mk02", "rennea", "guar"},
         unit = {
             count = 500,
             ingredients = {
                 {"automation-science-pack", 1},
                 {"logistic-science-pack",   1},
-                {"chemical-science-pack",   1},
-                {"py-science-pack-3",       1},
+                {"py-science-pack-2",       1},
             },
             time = 45
         }
@@ -151,6 +168,7 @@ return {
             effects = { -- the effects the tech will have on the building. valid types: 'module-effects', 'unlock-recipe', 'recipe-replacement', 'machine-replacement'
                 {recipe = "biomass-kicalk-dry",   type = "unlock-recipe"},
                 {recipe = "kicalk-dry-bedding",   type = "unlock-recipe"},
+                {recipe = "kicalk-dry-fiber",     type = "unlock-recipe"},
                 {recipe = "heatsink",             type = "unlock-recipe",                   also_unlocked_by_techs = true},
                 {recipe = "heating-system-cheap", type = "unlock-recipe"},
                 {old = "kicalk-plantation-mk01",  new = "kicalk-plantation-mk01-with-mesh", type = "recipe-replacement"},
